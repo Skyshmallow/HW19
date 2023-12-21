@@ -1,0 +1,149 @@
+[
+    {
+        "label": "Flask",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "render_template",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "request",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "jsonify",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "CORS",
+        "importPath": "flask_cors",
+        "description": "flask_cors",
+        "isExtraImport": true,
+        "detail": "flask_cors",
+        "documentation": {}
+    },
+    {
+        "label": "json",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "json",
+        "description": "json",
+        "detail": "json",
+        "documentation": {}
+    },
+    {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "secure_filename",
+        "importPath": "werkzeug.utils",
+        "description": "werkzeug.utils",
+        "isExtraImport": true,
+        "detail": "werkzeug.utils",
+        "documentation": {}
+    },
+    {
+        "label": "read_posts_from_file",
+        "kind": 2,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "def read_posts_from_file():\n  try:\n    with open('data.json', 'r') as file:\n      content = file.read()\n      posts = json.loads(content) if content else []\n      return posts if isinstance(posts, list) else []\n  except FileNotFoundError:\n    return []\n  except json.JSONDecodeError as e:\n    print(\"Error decoding JSON:\", str(e))",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "index",
+        "kind": 2,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "def index():\n  return render_template('index.html')\n@main.route('/posts', methods=['GET'])\ndef display_posts():\n    posts = read_posts_from_file()\n    if request.headers.get('Content-Type') == 'application/json':\n        # If the request is from Ajax, return JSON\n        return jsonify(posts)\n    return render_template('posts.html', posts=posts)\n@main.route('/search', methods=['POST'])",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "display_posts",
+        "kind": 2,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "def display_posts():\n    posts = read_posts_from_file()\n    if request.headers.get('Content-Type') == 'application/json':\n        # If the request is from Ajax, return JSON\n        return jsonify(posts)\n    return render_template('posts.html', posts=posts)\n@main.route('/search', methods=['POST'])\ndef search_posts():\n    search_term = request.json.get('search_term', '').lower()\n    posts = read_posts_from_file()",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "search_posts",
+        "kind": 2,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "def search_posts():\n    search_term = request.json.get('search_term', '').lower()\n    posts = read_posts_from_file()\n    # Filter posts based on the search term\n    filtered_posts = [post for post in posts if search_term in post['title'].lower()]\n    return jsonify(filtered_posts)\n@main.route('/post', methods=['POST'])\ndef create_post():\n  try:\n    title = request.form.get('title')",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "create_post",
+        "kind": 2,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "def create_post():\n  try:\n    title = request.form.get('title')\n    text = request.form.get('text')\n    photo = request.files['photo']\n    posts = read_posts_from_file()\n    try:\n      if photo:\n        filename = secure_filename(photo.filename)\n        filepath = os.path.join('static', 'img', filename)",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "delete_post",
+        "kind": 2,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "def delete_post(post_id):\n  try:\n    posts = read_posts_from_file()\n    if 0 < post_id <= len(posts):\n      deleted_post = posts.pop(post_id - 1)\n      with open('data.json', 'w') as file:\n        json.dump(posts, file, indent=2)\n      return jsonify({\n          \"message\": \"Post deleted successfully\",\n          \"deleted_post\": deleted_post",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "UPLOAD_FOLDER",
+        "kind": 5,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "UPLOAD_FOLDER = 'img'\nmain = Flask(__name__)\nmain.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER\nCORS(main)\ndef read_posts_from_file():\n  try:\n    with open('data.json', 'r') as file:\n      content = file.read()\n      posts = json.loads(content) if content else []\n      return posts if isinstance(posts, list) else []",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 5,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "main = Flask(__name__)\nmain.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER\nCORS(main)\ndef read_posts_from_file():\n  try:\n    with open('data.json', 'r') as file:\n      content = file.read()\n      posts = json.loads(content) if content else []\n      return posts if isinstance(posts, list) else []\n  except FileNotFoundError:",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "main.config['UPLOAD_FOLDER']",
+        "kind": 5,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "main.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER\nCORS(main)\ndef read_posts_from_file():\n  try:\n    with open('data.json', 'r') as file:\n      content = file.read()\n      posts = json.loads(content) if content else []\n      return posts if isinstance(posts, list) else []\n  except FileNotFoundError:\n    return []",
+        "detail": "main",
+        "documentation": {}
+    }
+]
